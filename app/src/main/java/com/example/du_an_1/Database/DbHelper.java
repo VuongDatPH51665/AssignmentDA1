@@ -6,15 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    // Tên database và phiên bản
     private static final String DATABASE_NAME = "QuanLyBanGiay.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // Tạo các bảng trong cơ sở dữ liệu
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Tạo bảng TaiKhoan
@@ -28,58 +26,18 @@ public class DbHelper extends SQLiteOpenHelper {
                 ");";
         db.execSQL(createTaiKhoanTable);
 
-        // Tạo bảng SanPham
-        String createSanPhamTable = "CREATE TABLE SanPham (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "ten_san_pham TEXT NOT NULL, " +
-                "mo_ta TEXT, " +
-                "gia REAL NOT NULL, " +
-                "so_luong INTEGER NOT NULL, " +
-                "hinh_anh TEXT" +
-                ");";
-        db.execSQL(createSanPhamTable);
+        // Tạo các bảng khác như SanPham, DonHang...
 
-        // Tạo bảng DonHang
-        String createDonHangTable = "CREATE TABLE DonHang (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "khach_hang_id INTEGER NOT NULL, " +
-                "ngay_dat DATE NOT NULL, " +
-                "tong_tien REAL NOT NULL, " +
-                "trang_thai TEXT NOT NULL, " +
-                "FOREIGN KEY (khach_hang_id) REFERENCES TaiKhoan(id)" +
-                ");";
-        db.execSQL(createDonHangTable);
+        // Mã hóa mật khẩu admin trước khi lưu vào cơ sở dữ liệu
+        TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO(null);  // Cần truyền context vào nếu cần
+        String hashedPassword = taiKhoanDAO.hashPassword("admin123");
 
-        // Tạo bảng ChiTietDonHang
-        String createChiTietDonHangTable = "CREATE TABLE ChiTietDonHang (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "don_hang_id INTEGER NOT NULL, " +
-                "san_pham_id INTEGER NOT NULL, " +
-                "so_luong INTEGER NOT NULL, " +
-                "gia REAL NOT NULL, " +
-                "FOREIGN KEY (don_hang_id) REFERENCES DonHang(id), " +
-                "FOREIGN KEY (san_pham_id) REFERENCES SanPham(id)" +
-                ");";
-        db.execSQL(createChiTietDonHangTable);
-
-        // Tạo bảng ThongKe
-        String createThongKeTable = "CREATE TABLE ThongKe (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "san_pham_id INTEGER NOT NULL, " +
-                "so_luong_ban INTEGER NOT NULL, " +
-                "thang INTEGER NOT NULL, " +
-                "nam INTEGER NOT NULL, " +
-                "FOREIGN KEY (san_pham_id) REFERENCES SanPham(id)" +
-                ");";
-        db.execSQL(createThongKeTable);
-
-        // Thêm tài khoản admin cố định
+        // Thêm tài khoản admin với mật khẩu đã mã hóa
         String insertAdminAccount = "INSERT INTO TaiKhoan (ten, email, so_dien_thoai, mat_khau, vai_tro) " +
-                "VALUES ('Admin', 'admin@example.com', '0123456789', 'matkhau_admin_mahoa', 'admin');";
-        db.execSQL(insertAdminAccount);
+                "VALUES ('Admin', 'admin@example.com', '0123456789', ?, 'admin');";
+        db.execSQL(insertAdminAccount, new Object[]{hashedPassword});
     }
 
-    // Nâng cấp cơ sở dữ liệu
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS TaiKhoan");
