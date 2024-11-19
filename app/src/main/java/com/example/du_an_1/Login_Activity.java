@@ -47,7 +47,7 @@ public class Login_Activity extends AppCompatActivity {
             } else {
                 // Đăng nhập thành công
                 if (vaiTro.equals("admin")) {
-                    Intent intent = new Intent(this,QuanLySanPhamAdmin .class);
+                    Intent intent = new Intent(this,TrangChuAdmin.class);
                     intent.putExtra("email", username); // Truyền email cho màn hình tiếp theo
                     startActivity(intent);
                     finish();

@@ -13,6 +13,9 @@
         android:theme="@style/Theme.DU_AN_1"
         tools:targetApi="31">
         <activity
+            android:name=".TrangChuAdmin"
+            android:exported="false" />
+        <activity
             android:name=".QuanLySanPhamAdmin"
             android:exported="false" />
         <activity

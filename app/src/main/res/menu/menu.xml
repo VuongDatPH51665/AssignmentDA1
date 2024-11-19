@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_qlsp"
+        android:title="Quản lý sản phẩm"
+        android:icon="@drawable/ic_product" />
+    <item
+        android:id="@+id/nav_orders"
+        android:title="Theo dõi đơn hàng"
+        android:icon="@drawable/ic_orders" />
+    <item
+        android:id="@+id/nav_revenue"
+        android:title="Tổng doanh thu"
+        android:icon="@drawable/ic_revenue" />
+    <item
+        android:id="@+id/nav_statistics"
+        android:title="Thống kê sản phẩm"
+        android:icon="@drawable/ic_statistics" />
+</menu>
