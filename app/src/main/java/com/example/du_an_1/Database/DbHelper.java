@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "QuanLyBanGiay.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,7 +25,16 @@ public class DbHelper extends SQLiteOpenHelper {
                 "vai_tro TEXT NOT NULL CHECK (vai_tro IN ('admin', 'nguoi_mua'))" +
                 ");";
         db.execSQL(createTaiKhoanTable);
-
+        // Tạo bảng SanPham
+        String createSanPhamTable = "CREATE TABLE SanPham (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ten TEXT NOT NULL, " +
+                "gia REAL NOT NULL, " +
+                "size TEXT NOT NULL, " +
+                "so_luong INTEGER NOT NULL, " +
+                "mo_ta TEXT" +
+                ");";
+        db.execSQL(createSanPhamTable);
         // Tạo các bảng khác như SanPham, DonHang...
 
         // Mã hóa mật khẩu admin trước khi lưu vào cơ sở dữ liệu
